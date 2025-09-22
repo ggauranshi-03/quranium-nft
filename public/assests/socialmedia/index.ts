@@ -1,0 +1,8 @@
+export { default as instagram} from "./instagram.svg"
+export { default as linkdien} from "./linkdien.svg"
+export { default as telegram} from "./telegram.svg"
+export { default as medium} from "./medium.svg"
+export { default as x} from "./x.svg"
+export { default as youtube} from "./youtube.svg"
+export { default as reddit} from "./reddit.svg"
+export { default as discord} from "./discord.svg"

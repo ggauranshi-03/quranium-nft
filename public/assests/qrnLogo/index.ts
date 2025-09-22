@@ -1,0 +1,1 @@
+export { default as qrnlogo } from "./qrnlogo.svg"

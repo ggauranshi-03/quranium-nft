@@ -1,0 +1,300 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Utility Layer */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .scroll-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scroll-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
+
+/* OKLCH Theme Variables */
+:root {
+  --radius: 0.65rem;
+  --background: 0 0% 100%;
+  --foreground: 285 0.5% 14%;
+  --card: 0 0% 100%;
+  --card-foreground: 285 0.5% 14%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 285 0.5% 14%;
+  --primary: 262 100% 56%;
+  --primary-foreground: 294 1.6% 96.9%;
+  --secondary: 286 0.1% 96.7%;
+  --secondary-foreground: 286 0.6% 21%;
+  --muted: 286 0.1% 96.7%;
+  --muted-foreground: 286 1.6% 55.2%;
+  --accent: 286 0.1% 96.7%;
+  --accent-foreground: 286 0.6% 21%;
+  --destructive: 27 24.5% 57.7%;
+  --border: 286 0.4% 92%;
+  --input: 286 0.4% 92%;
+  --ring: 293 25% 60.6%;
+  --chart-1: 41 22.2% 64.6%;
+  --chart-2: 185 11.8% 60%;
+  --chart-3: 227 7% 39.8%;
+  --chart-4: 84 18.9% 82.8%;
+  --chart-5: 70 18.8% 76.9%;
+  --sidebar: 0 0% 98.5%;
+  --sidebar-foreground: 285 0.5% 14%;
+  --sidebar-primary: 293 25% 60.6%;
+  --sidebar-primary-foreground: 294 1.6% 96.9%;
+  --sidebar-accent: 286 0.1% 96.7%;
+  --sidebar-accent-foreground: 286 0.6% 21%;
+  --sidebar-border: 286 0.4% 92%;
+  --sidebar-ring: 293 25% 60.6%;
+}
+
+.dark {
+  --background: 0 0% 4%;
+  --foreground: 0 0% 98.5%;
+  --card: 0, 0%, 4%, 1;
+  --card-foreground: 0 0% 98.5%;
+  --popover: 286 0.6% 21%;
+  --popover-foreground: 0 0% 98.5%;
+  --primary: 262 100% 56%;
+  --primary-foreground: 294 1.6% 96.9%;
+  --secondary: 286 0.6% 27.4%;
+  --secondary-foreground: 0 0% 98.5%;
+  --muted: 286 0.6% 27.4%;
+  --muted-foreground: 286 1.5% 70.5%;
+  --accent: 286 0.6% 27.4%;
+  --accent-foreground: 0 0% 98.5%;
+  --destructive: 22 19.1% 70.4%;
+  --border: 0 0% 100% / 10%;
+  --input: 0 0% 100% / 15%;
+  --ring: 293 28.1% 54.1%;
+  --chart-1: 264 24.3% 48.8%;
+  --chart-2: 162 17% 69.6%;
+  --chart-3: 70 18.8% 76.9%;
+  --chart-4: 304 26.5% 62.7%;
+  --chart-5: 16 24.6% 64.5%;
+  --sidebar: 286 0.6% 21%;
+  --sidebar-foreground: 0 0% 98.5%;
+  --sidebar-primary: 293 28.1% 54.1%;
+  --sidebar-primary-foreground: 294 1.6% 96.9%;
+  --sidebar-accent: 286 0.6% 27.4%;
+  --sidebar-accent-foreground: 0 0% 98.5%;
+  --sidebar-border: 0 0% 100% / 10%;
+  --sidebar-ring: 293 28.1% 54.1%;
+}
+
+/* Font Faces */
+/* @font-face {
+  font-family: "Urbanist-Regular";
+  src: url("/fonts/Urbanist-Regular.ttf");
+}
+@font-face {
+  font-family: "Urbanist-Medium";
+  src: url("/fonts/Urbanist-Medium.ttf");
+} */
+/* Add others as needed... */
+
+/* Custom Component Classes */
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+.grey-gradient-bg {
+  @apply whitespace-pre-wrap bg-gradient-to-t from-black/40 via-transparent to-transparent rounded-lg overflow-hidden font-medium tracking-tighter;
+}
+
+.flex-center {
+  @apply flex justify-center items-center;
+}
+
+/* Responsive spacing */
+.p-responsive {
+  @apply px-5 sm:px-10 xl:px-16;
+}
+.m-responsive {
+  @apply mx-5 sm:mx-10 xl:mx-16;
+}
+
+/* Typography */
+.p-text {
+  @apply text-[#FFFFFF] font-montserrat text-[15px] leading-[25px] lg:text-[16px] lg:leading-8;
+}
+.h1-title {
+  @apply text-2xl sm:text-4xl lg:text-[44px] xl:text-[63px] tracking-wide text-[#101010] lg:leading-[50px] xl:leading-[74px] font-montserrat;
+}
+.h2-title {
+  @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-tight sm:tracking-normal mb-4 text-[#101010] lg:leading-[54px] sm:leading-snug font-montserrat;
+}
+.h3-title {
+  @apply text-[#FFFFFF] text-lg sm:text-xl lg:text-[26px] sm:leading-[36px] font-montserrat;
+}
+
+/* Buttons */
+.red-btn {
+  @apply bg-[#CE192D] h-11 text-sm px-6 py-3 text-center font-montserrat font-semibold text-white rounded-lg;
+}
+.outline-btn {
+  @apply mt-[21px] h-11 text-sm px-6 py-3 md:w-fit md:min-w-[164px] font-montserrat font-semibold   bg-white border border-[#CE192D] text-[#CE192D] rounded-[8px] flex items-center justify-center w-full gap-x-2 hover:bg-red-100 transition-all duration-200;
+}
+.custom-button {
+  @apply bg-[#601DFF] text-white;
+}
+.hover-scale-on {
+  @apply transition-transform transform duration-300 ease-in-out hover:scale-105 hover:z-10 hover:shadow-2xl;
+}
+
+/* Layouts */
+.grid-responsive {
+  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6;
+}
+.use-case-container {
+  @apply m-responsive p-5 lg:p-10 flex flex-col lg:flex-row;
+}
+.footer-link {
+  @apply grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-16 gap-y-8 lg:gap-8 mt-5 lg:mt-0;
+}
+
+/* Theme helpers */
+.custom-red {
+  @apply bg-[#ce192d] flex justify-center items-center;
+}
+.main-bg {
+  @apply bg-[#0A0A0A];
+}
+.main-border {
+  @apply border-[#6D7D9326];
+}
+.active-text {
+  @apply text-[#CDB8FF];
+}
+.disable-text {
+  @apply text-[#A3A3A3];
+}
+.unlocked-quest {
+  background: linear-gradient(131.77deg, #090716 14.42%, #1e002e 273.64%),
+    linear-gradient(
+      264.48deg,
+      rgba(0, 0, 0, 0) 66.06%,
+      rgba(9, 2, 18, 0.9) 92.29%
+    );
+}
+.locked-quest {
+  @apply bg-[#111111];
+}
+.card-gradient {
+  background: linear-gradient(
+    141.6deg,
+    rgba(0, 0, 0, 0) 22.8%,
+    rgba(26, 6, 52, 0.9) 97.44%
+  );
+}
+
+.user-avatar-fallback {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.36) -8.42%,
+    rgba(85, 84, 84, 0.36) 100%
+  );
+  width: 134px;
+  height: 134px;
+  border-radius: 9999px;
+}
+.user-btn {
+  width: 173;
+  height: 46;
+  gap: 10px;
+  border-radius: 500px;
+  border-width: 1px;
+  padding-top: 10px;
+  padding-right: 25px;
+  padding-bottom: 10px;
+  padding-left: 25px;
+  border: 1px solid #f1f1f1;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px transparent inset !important; /* Use your background color */
+  box-shadow: 0 0 0 1000px transparent inset !important;         /* Use your background color */
+  -webkit-text-fill-color: #fff !important;                  /* Use your text color */
+  caret-color: #fff !important;                              /* Use your caret color */
+  transition: background-color 5000s ease-in-out 0s;
+}
+.user-input {
+  border: 1px solid;
+  border-image-source: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.11) -8.42%,
+    rgba(85, 84, 84, 0.11) 100%
+  );
+  border-image-slice: 1;
+  width: 582.5;
+  height: 50;
+  border-radius: 10px;
+  border-width: 1px;
+  gap:10px;
+  padding-top: 15px;
+  padding-right: 20px;
+  padding-bottom: 15px;
+  padding-left: 20px;
+  backdrop-filter: blur(184px)
+
+}
+.user-input-label{
+
+font-weight: 400;
+font-size: 18px;
+line-height: 100%;
+letter-spacing: -3%;
+
+}
+.mint-fragment {
+  background: linear-gradient(212.61deg, #090716 59.7%, #69329a 171.15%),
+    linear-gradient(
+      264.48deg,
+      rgba(0, 0, 0, 0) 66.06%,
+      rgba(12, 3, 24, 0.9) 92.29%
+    ),
+    linear-gradient(90deg, rgba(17, 17, 17, 0) 0%, #070707 100%);
+}
+.home-icons {
+  @apply w-8 h-8;
+}
+/* Example: styles/telegram-custom.css */
+
+/* Make Telegram button look like Discord/X button */
+.tgme_widget_login.large button.tgme_widget_login_button,
+button.tgme_widget_login_button {
+  font-size: 16px !important;
+  line-height: 20px !important;
+  padding: 9px 21px 11px !important;
+  border-radius: 9999px !important; /* fully rounded */
+  font-weight: 600 !important;
+  border: 1.5px solid #fff !important; /* match Discord/X border */
+  background: transparent !important;  /* or use your brand color */
+  color: #fff !important;
+  box-shadow: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 120px !important;
+  transition: background 0.2s, color 0.2s;
+  gap: 8px;
+}
+
+.tgme_widget_login.large button.tgme_widget_login_button:hover,
+button.tgme_widget_login_button:hover {
+  background: #23272a !important; /* Discord hover color or your brand hover */
+  color: #fff !important;
+  border-color: #fff !important;
+}
+
+@layer components {
+  .main-container {
+     @apply w-full px-4 xl:max-w-[2000px] xl:mx-auto;
+  }
+}

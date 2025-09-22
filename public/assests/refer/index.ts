@@ -1,0 +1,6 @@
+export { default as Group} from "./Group.svg"
+export { default as HandMoney} from "./HandMoney.svg"
+export { default as Translation} from "./Translation.svg"
+export { default as UsersGroup} from "./UsersGroup.svg"
+export { default as Wallet} from "./Wallet.svg"
+export { default as IconCopy} from "./IconCopy.svg"
