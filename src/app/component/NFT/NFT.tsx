@@ -344,7 +344,8 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 
-const CONTRACT_ADDRESS = "0xdff0d1cf2ae96accccb63b21b327220ce8e499c5";
+// const CONTRACT_ADDRESS = "0xfeef6a37709244a971806ce06fc3acefd07577e2";
+const CONTRACT_ADDRESS = "0xa573e71d56a53a12da8e8509fa49488f9ecb63e6";
 const CONTRACT_ABI = [
   "function name() external view returns (string)",
   "function symbol() external view returns (string)",
