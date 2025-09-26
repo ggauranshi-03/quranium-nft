@@ -497,7 +497,7 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 
-const CONTRACT_ADDRESS = "0x6d2ca121e27fcd972d5a7de714100ccadb2c6ceb";
+const CONTRACT_ADDRESS = "0x4e2c1cbcae50eacf742b3db2526639d4f7224bc7";
 // const CONTRACT_ADDRESS = "0xa573e71d56a53a12da8e8509fa49488f9ecb63e6";
 const CONTRACT_ABI = [
   {
@@ -678,6 +678,19 @@ const CONTRACT_ABI = [
     inputs: [
       {
         internalType: "address",
+        name: "user",
+        type: "address",
+      },
+    ],
+    name: "addEntryFor",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
         name: "account",
         type: "address",
       },
@@ -730,7 +743,7 @@ const CONTRACT_ABI = [
         type: "uint256",
       },
     ],
-    name: "getReferralCount",
+    name: "getEntries",
     outputs: [
       {
         internalType: "uint256",
@@ -749,7 +762,7 @@ const CONTRACT_ABI = [
         type: "address",
       },
     ],
-    name: "getUserReferralCount",
+    name: "getUserEntryCount",
     outputs: [
       {
         internalType: "uint256",
@@ -790,19 +803,6 @@ const CONTRACT_ABI = [
       },
     ],
     stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "user",
-        type: "address",
-      },
-    ],
-    name: "incrementReferralFor",
-    outputs: [],
-    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -896,7 +896,13 @@ const CONTRACT_ABI = [
     type: "function",
   },
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: "address",
+        name: "referrer",
+        type: "address",
+      },
+    ],
     name: "refer",
     outputs: [],
     stateMutability: "nonpayable",
@@ -996,6 +1002,24 @@ const CONTRACT_ABI = [
   {
     inputs: [
       {
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "newCount",
+        type: "uint256",
+      },
+    ],
+    name: "setEntryCount",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "string",
         name: "newURI",
         type: "string",
@@ -1015,24 +1039,6 @@ const CONTRACT_ABI = [
       },
     ],
     name: "setName",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "newCount",
-        type: "uint256",
-      },
-    ],
-    name: "setReferralCount",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -1129,7 +1135,6 @@ const CONTRACT_ABI = [
     type: "function",
   },
 ];
-
 interface CollectionInfo {
   name: string;
   symbol: string;
@@ -1138,7 +1143,7 @@ interface CollectionInfo {
 
 interface UserNFTInfo {
   tokenId: number;
-  referralCount: number;
+  entryCount: number;
   metadata?: {
     name: string;
     description: string;
@@ -1162,6 +1167,7 @@ const NFTComponent = ({ userAddress }: NFTComponentProps) => {
   const [checkedUserInfo, setCheckedUserInfo] = useState<UserNFTInfo | null>(
     null
   );
+  const [referrerAddress, setReferrerAddress] = useState<string>("");
 
   const fetchCollectionInfo = async (contract: ethers.Contract) => {
     const [name, symbol, nextTokenId] = await Promise.all([
@@ -1181,13 +1187,13 @@ const NFTComponent = ({ userAddress }: NFTComponentProps) => {
     contract: ethers.Contract,
     address: string
   ) => {
-    const [tokenId, referralCount] = await Promise.all([
+    const [tokenId, entryCount] = await Promise.all([
       contract.getUserTokenId(address),
-      contract.getUserReferralCount(address),
+      contract.getUserEntryCount(address),
     ]);
 
     const parsedTokenId = Number(tokenId);
-    const parsedReferralCount = Number(referralCount);
+    const parsedEntryCount = Number(entryCount);
 
     let metadata;
     if (parsedTokenId > 0) {
@@ -1202,7 +1208,7 @@ const NFTComponent = ({ userAddress }: NFTComponentProps) => {
 
     const info: UserNFTInfo = {
       tokenId: parsedTokenId,
-      referralCount: parsedReferralCount,
+      entryCount: parsedEntryCount,
       metadata,
     };
 
@@ -1405,11 +1411,18 @@ const NFTComponent = ({ userAddress }: NFTComponentProps) => {
       throw new Error("QSafe wallet not connected");
     }
 
+    if (!ethers.isAddress(referrerAddress)) {
+      setError("Invalid referrer address");
+      return;
+    }
+
     const qsafeProvider = window.qsafe.providers.ethereum;
     const contractInterface = new ethers.Interface(CONTRACT_ABI);
 
     // 1. Encode function data
-    const data = contractInterface.encodeFunctionData("refer");
+    const data = contractInterface.encodeFunctionData("refer", [
+      referrerAddress,
+    ]);
 
     // 2. Get gas price
     let gasPrice: string;
@@ -1590,7 +1603,7 @@ const NFTComponent = ({ userAddress }: NFTComponentProps) => {
         <h1 className="text-2xl font-bold text-indigo-300 mb-4 md:mb-0">
           Quranium IPhone NFT
           <span className="block text-sm text-indigo-200 mt-1">
-            Mint and update your referral badge
+            Mint and update your entry ticket
           </span>
         </h1>
       </header>
@@ -1603,7 +1616,7 @@ const NFTComponent = ({ userAddress }: NFTComponentProps) => {
               NFT Collection
             </h2>
             <p className="text-indigo-200">
-              Free minting with dynamic referral updates
+              Free minting with dynamic entry updates
             </p>
           </div>
 
@@ -1646,10 +1659,8 @@ const NFTComponent = ({ userAddress }: NFTComponentProps) => {
                   </p>
                 </div>
                 <div className="p-3 bg-gray-800/50 rounded-lg">
-                  <p className="text-indigo-200">Referral Count:</p>
-                  <p className="font-bold text-lg">
-                    {userNFTInfo.referralCount}
-                  </p>
+                  <p className="text-indigo-200">Entry Count:</p>
+                  <p className="font-bold text-lg">{userNFTInfo.entryCount}</p>
                 </div>
               </div>
               {userNFTInfo.metadata && (
@@ -1674,23 +1685,32 @@ const NFTComponent = ({ userAddress }: NFTComponentProps) => {
           )}
 
           {/* Mint and Refer Buttons */}
-          <div className="mb-6 flex justify-center gap-4">
+          <div className="mb-6 flex flex-col justify-center gap-4">
             {userNFTInfo?.tokenId === 0 && (
-              <button
-                onClick={handleMint}
-                disabled={loading || !userAddress}
-                className="px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? "Processing..." : "Mint NFT"}
-              </button>
+              <>
+                <input
+                  type="text"
+                  value={referrerAddress}
+                  onChange={(e) => setReferrerAddress(e.target.value)}
+                  placeholder="Enter referrer address"
+                  className="w-full p-2 mb-2 bg-gray-800 text-white rounded"
+                />
+                <button
+                  onClick={handleRefer}
+                  disabled={loading || !userAddress}
+                  className="px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {loading ? "Processing..." : "Refer"}
+                </button>
+                <button
+                  onClick={handleMint}
+                  disabled={loading || !userAddress}
+                  className="px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {loading ? "Processing..." : "Mint NFT"}
+                </button>
+              </>
             )}
-            <button
-              onClick={handleRefer}
-              disabled={loading || !userAddress}
-              className="px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? "Processing..." : "Refer"}
-            </button>
           </div>
 
           {/* Check Other User */}
@@ -1721,9 +1741,9 @@ const NFTComponent = ({ userAddress }: NFTComponentProps) => {
                   </p>
                 </div>
                 <div className="p-3 bg-gray-800/50 rounded-lg">
-                  <p className="text-indigo-200">Referral Count:</p>
+                  <p className="text-indigo-200">Entry Count:</p>
                   <p className="font-bold text-lg">
-                    {checkedUserInfo.referralCount}
+                    {checkedUserInfo.entryCount}
                   </p>
                 </div>
               </div>
